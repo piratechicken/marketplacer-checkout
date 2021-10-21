@@ -4,6 +4,7 @@ RSpec.describe MarketplacerCheckout::Cart do
   subject { described_class.new }
 
   let(:product) { MarketplacerCheckout::Product.new(123, 'Chain Ring', 100.99) }
+  let(:product_two) { MarketplacerCheckout::Product.new(234, '11-23 cassette', 80.45) }
 
   describe '#add_line_item' do
     it 'adds the matching product as line_item' do
@@ -38,8 +39,6 @@ RSpec.describe MarketplacerCheckout::Cart do
       end
 
       context 'with a different product uuid' do
-        let(:product_two) { MarketplacerCheckout::Product.new(234, '11-23 cassette', 80.45) }
-
         before { subject.add_line_item(product) }
 
         it 'adds a new line item' do
@@ -56,6 +55,19 @@ RSpec.describe MarketplacerCheckout::Cart do
           )
         end
       end
+    end
+  end
+
+  describe '#total_cost' do
+    before do
+      3.times { subject.add_line_item(product) }
+      2.times { subject.add_line_item(product_two) }
+    end
+
+    it 'sums the line item costs' do
+      expected_cost = (3 * product.price) + (2 * product_two.price)
+
+      expect(subject.total_cost).to eq(expected_cost)
     end
   end
 end

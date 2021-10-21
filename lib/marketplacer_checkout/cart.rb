@@ -16,10 +16,6 @@ module MarketplacerCheckout
       matching_line_item.increment_quantity
     end
 
-    def remove_line_item(product_uuid)
-      # Remove product or decrement quantity
-    end
-
     def total_cost
       line_items_total - discounts_total
     end
@@ -31,10 +27,11 @@ module MarketplacerCheckout
     end
 
     def apply_discount
-      # 
+      # TODO
     end
 
     def line_items_total
+      @line_items.values.sum { |line_item| line_item.quantity * line_item.unit_price }
     end
 
     def discounts_total
