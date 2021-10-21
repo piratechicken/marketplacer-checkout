@@ -16,7 +16,7 @@ module MarketplacerCheckout
     end
 
     def pretty_string
-      "#{name} | Quantity: #{quantity} | Unit price: $#{unit_price} | Price: $#{price}"
+      "#{name} | Quantity: #{quantity} | Unit price: $#{unit_price} | Price: $#{format('%.2f', price)}"
     end
 
     def price

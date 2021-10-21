@@ -70,4 +70,24 @@ RSpec.describe MarketplacerCheckout::Cart do
       expect(subject.total_cost).to eq(expected_cost)
     end
   end
+
+  describe '#pretty_string' do
+    before do
+      3.times { subject.add_line_item(product) }
+      2.times { subject.add_line_item(product_two) }
+    end
+
+    it 'returns a human readable cart summary' do
+      expect(subject.pretty_string).to eq(expected_pretty_string)
+    end
+  end
+
+  private
+
+  def expected_pretty_string
+    "Products in Shopping Cart:\n"\
+      "1: Chain Ring | Quantity: 3 | Unit price: $100.99 | Price: $302.97\n"\
+      "2: 11-23 cassette | Quantity: 2 | Unit price: $80.45 | Price: $160.90\n"\
+      'Total: $463.87'
+  end
 end
