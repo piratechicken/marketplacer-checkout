@@ -51,7 +51,7 @@ module MarketplacerCheckout
         discount.cart_subtotal < line_items_total
       end
 
-      @applied_discount = qualifying_discounts.max_by(&:cart_subtotal)
+      @applied_discount = qualifying_discounts&.max_by(&:cart_subtotal)
     end
 
     def line_items_as_string
@@ -63,7 +63,7 @@ module MarketplacerCheckout
     end
 
     def discount_as_string
-      return "You have no discounts applied\n" if @applied_discount.nil?
+      return "You have no discounts applied" if @applied_discount.nil?
 
       "Discount applied: #{@applied_discount.pretty_string}"
     end

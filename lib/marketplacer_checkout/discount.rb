@@ -18,7 +18,7 @@ module MarketplacerCheckout
     end
 
     def pretty_string
-      "#{format('%.0f', percentage)}% off on total greater than $#{format('%.2f', cart_subtotal)}"
+      "#{format('%.0f', percentage)}% off on total greater than $#{format('%.0f', cart_subtotal)}"
     end
   end
 end
