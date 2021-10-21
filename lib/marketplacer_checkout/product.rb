@@ -23,6 +23,10 @@ module MarketplacerCheckout
       end
     end
 
+    def pretty_string
+      "ID: #{uuid} | Title: #{name} | Price: $#{price}"
+    end
+
     class << self
       private
 

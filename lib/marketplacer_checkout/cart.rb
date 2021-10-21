@@ -23,7 +23,7 @@ module MarketplacerCheckout
     private
 
     def add_new_line_item(product)
-      @line_items[product.uuid] = LineItem.new(product.uuid, 1, product.price)
+      @line_items[product.uuid] = LineItem.new(product.uuid, product.name, 1, product.price)
     end
 
     def apply_discount
