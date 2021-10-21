@@ -5,9 +5,6 @@ require 'JSON'
 module MarketplacerCheckout
   class Product
     class InvalidProductDataError < StandardError; end
-
-    private_class_method :valid_data?, :validate_data
-
     attr_accessor :uuid, :name, :price
 
     def initialize(uuid, name, price)
@@ -22,20 +19,34 @@ module MarketplacerCheckout
       products_data.map do |product_data|
         validate_data(product_data)
 
-        new(product_data['uuid'], product_data['name'], product_data['price'])
+        new(product_data['uuid'], product_data['name'], product_data['price'].to_f)
       end
     end
 
-    def self.validate_data(product_data)
-      return if valid_data?(product_data)
+    class << self
+      private
 
-      raise InvalidProductDataError, "Invalid data: #{product_data}"
-    end
+      def numerical?(string)
+        # This method comes from Rail's numericality source:
+        # https://apidock.com/rails/ActiveModel/Validations/ClassMethods/validates_numericality_of
+        # And this blog post:
+        # https://mentalized.net/journal/2011/04/14/ruby-how-to-check-if-a-string-is-numeric/
+        !Float(string).nil?
+      rescue ArgumentError, TypeError
+        false
+      end
 
-    def self.valid_data?(product_data)
-      product_data['uuid'].is_a?(Integer) &&
-        product_data['name'].is_a?(String) &&
-        product_data['price'].is_a?(Float)
+      def validate_data(product_data)
+        return if valid_data?(product_data)
+
+        raise InvalidProductDataError, "Invalid data: #{product_data}"
+      end
+
+      def valid_data?(product_data)
+        product_data['uuid'].is_a?(Integer) &&
+          product_data['name'].is_a?(String) &&
+          numerical?(product_data['price'])
+      end
     end
   end
 end
