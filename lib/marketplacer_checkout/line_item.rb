@@ -9,5 +9,9 @@ module MarketplacerCheckout
       @quantity = quantity
       @unit_price = unit_price
     end
+
+    def increment_quantity
+      @quantity += 1
+    end
   end
 end
