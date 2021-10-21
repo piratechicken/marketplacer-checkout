@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'byebug'
 
 module MarketplacerCheckout
   class Cart
@@ -28,7 +27,7 @@ module MarketplacerCheckout
     end
 
     def pretty_string
-      "#{line_items_as_string}\nTotal: $#{format('%.2f', total_cost)}"
+      "#{line_items_as_string}\n#{discount_as_string}\n#{total_as_string}"
     end
 
     private
@@ -61,6 +60,16 @@ module MarketplacerCheckout
       line_items.values.map.with_index do |line_item, index|
         "#{index + 1}: #{line_item.pretty_string}"
       end.join("\n")
+    end
+
+    def discount_as_string
+      return "You have no discounts applied\n" if @applied_discount.nil?
+
+      "Discount applied: #{@applied_discount.pretty_string}"
+    end
+
+    def total_as_string
+      "Total: $#{format('%.2f', total_cost)}"
     end
   end
 end

@@ -57,7 +57,7 @@ RSpec.describe MarketplacerCheckout::Cart do
         end
       end
     end
-    
+
     context 'with available discounts' do
       let(:available_discounts) do
         [

@@ -13,3 +13,6 @@ Metrics/BlockLength:
 
 Style/BlockComments:
   Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
