@@ -13,7 +13,7 @@ module MarketplacerCheckout
 
       add_new_line_item(product) && return if matching_line_item.nil?
 
-      increment_line_item_quantity
+      matching_line_item.increment_quantity
     end
 
     def remove_line_item(product_uuid)
@@ -21,7 +21,7 @@ module MarketplacerCheckout
     end
 
     def total_cost
-      # line_items total - discounts
+      line_items_total - discounts_total
     end
 
     private
@@ -30,11 +30,16 @@ module MarketplacerCheckout
       @line_items[product.uuid] = LineItem.new(product.uuid, 1, product.price)
     end
 
-    def increment_line_item_quantity(line_item)
-    end
-
     def apply_discount
       # 
+    end
+
+    def line_items_total
+    end
+
+    def discounts_total
+      # TODO
+      0
     end
   end
 end
