@@ -63,7 +63,7 @@ module MarketplacerCheckout
     end
 
     def discount_as_string
-      return "You have no discounts applied" if @applied_discount.nil?
+      return 'You have no discounts applied' if @applied_discount.nil?
 
       "Discount applied: #{@applied_discount.pretty_string}"
     end
