@@ -12,9 +12,10 @@ RSpec.describe MarketplacerCheckout::Cart do
 
       line_item = subject.line_items.first
 
+      expect(subject.line_items.count).to eq(1)
       expect(line_item).to be_kind_of(MarketplacerCheckout::LineItem)
       expect(line_item).to have_attributes(
-        product_uuid: product,
+        product_uuid: product.uuid,
         quantity: 1,
         unit_price: product.price
       )

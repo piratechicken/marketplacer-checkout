@@ -8,7 +8,8 @@ module MarketplacerCheckout
       @line_items = []
     end
 
-    def add_line_item(product_uuid)
+    def add_line_item(product)
+      @line_items << LineItem.new(product.uuid, 1, product.price)
       # Add product or increment quantity
     end
 
