@@ -122,8 +122,8 @@ RSpec.describe MarketplacerCheckout::Cart do
 
   def expected_pretty_string
     "1: Chain Ring | Quantity: 3 | Unit price: $100.99 | Price: $302.97\n"\
-      "2: 11-23 cassette | Quantity: 2 | Unit price: $80.45 | Price: $160.90\n"\
-      "You have no discounts applied\n"\
+      "2: 11-23 cassette | Quantity: 2 | Unit price: $80.45 | Price: $160.90\n\n"\
+      "You have no discounts applied\n\n"\
       'Total: $463.87'
   end
 end

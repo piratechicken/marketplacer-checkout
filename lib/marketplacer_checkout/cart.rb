@@ -27,7 +27,7 @@ module MarketplacerCheckout
     end
 
     def pretty_string
-      "#{line_items_as_string}\n#{discount_as_string}\n#{total_as_string}"
+      "#{line_items_as_string}\n\n#{discount_as_string}\n\n#{total_as_string}"
     end
 
     private
@@ -55,7 +55,7 @@ module MarketplacerCheckout
     end
 
     def line_items_as_string
-      return "You have no items in your cart\n" if @line_items.empty?
+      return "You have no items in your cart" if @line_items.empty?
 
       line_items.values.map.with_index do |line_item, index|
         "#{index + 1}: #{line_item.pretty_string}"
