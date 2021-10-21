@@ -1,23 +1,30 @@
 # frozen_string_literal: true
+require 'byebug'
 
 module MarketplacerCheckout
   class Cart
     attr_reader :line_items
 
-    def initialize
+    def initialize(available_discounts)
       @line_items = {}
+      @available_discounts = available_discounts
+      @applied_discount = nil
     end
 
     def add_line_item(product)
       matching_line_item = @line_items[product.uuid]
 
-      add_new_line_item(product) && return if matching_line_item.nil?
+      if matching_line_item.nil?
+        add_new_line_item(product)
+      else
+        matching_line_item.increment_quantity
+      end
 
-      matching_line_item.increment_quantity
+      update_discount
     end
 
     def total_cost
-      line_items_total - discounts_total
+      line_items_total - discount_total
     end
 
     def pretty_string
@@ -30,17 +37,22 @@ module MarketplacerCheckout
       line_items[product.uuid] = LineItem.new(product.uuid, product.name, 1, product.price)
     end
 
-    def apply_discount
-      # TODO
-    end
-
     def line_items_total
       line_items.values.sum { |line_item| line_item.quantity * line_item.unit_price }
     end
 
-    def discounts_total
-      # TODO
-      0
+    def discount_total
+      return 0 if @applied_discount.nil?
+
+      line_items_total * @applied_discount.percentage / 100
+    end
+
+    def update_discount
+      qualifying_discounts = @available_discounts&.select do |discount|
+        discount.cart_subtotal < line_items_total
+      end
+
+      @applied_discount = qualifying_discounts.max_by(&:cart_subtotal)
     end
 
     def line_items_as_string

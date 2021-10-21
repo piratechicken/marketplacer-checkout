@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.describe MarketplacerCheckout::Cart do
-  subject { described_class.new }
+  subject { described_class.new(available_discounts) }
 
+  let(:available_discounts) { nil }
   let(:product) { MarketplacerCheckout::Product.new(123, 'Chain Ring', 100.99) }
   let(:product_two) { MarketplacerCheckout::Product.new(234, '11-23 cassette', 80.45) }
 
@@ -56,6 +57,41 @@ RSpec.describe MarketplacerCheckout::Cart do
         end
       end
     end
+    
+    context 'with available discounts' do
+      let(:available_discounts) do
+        [
+          MarketplacerCheckout::Discount.new(300, 10),
+          MarketplacerCheckout::Discount.new(350, 20)
+        ]
+      end
+
+      before do
+        subject.add_line_item(product)
+        subject.add_line_item(product_two)
+      end
+
+      it 'does not apply a discount' do
+        expected_cost = product.price + product_two.price
+
+        expect(subject.total_cost).to eq(expected_cost)
+      end
+
+      context 'when it qualifies for a discount' do
+        before do
+          subject.add_line_item(product)
+          subject.add_line_item(product_two)
+        end
+
+        it '' do
+          line_item_total = (2 * product.price) + (2 * product_two.price)
+          discount = line_item_total * 20 / 100
+          expected_cost = line_item_total - discount
+
+          expect(subject.total_cost).to eq(expected_cost)
+        end
+      end
+    end
   end
 
   describe '#total_cost' do
@@ -82,11 +118,28 @@ RSpec.describe MarketplacerCheckout::Cart do
     end
   end
 
+  describe 'discounts' do
+    let(:available_discounts) do
+      [
+        MarketplacerCheckout::Discount.new(300, 10),
+        MarketplacerCheckout::Discount.new(400, 20)
+      ]
+    end
+
+    before do
+      3.times { subject.add_line_item(product) }
+      2.times { subject.add_line_item(product_two) }
+    end
+
+    it '' do
+      expect(subject.total_cost).to eq(100.50)
+    end
+  end
+
   private
 
   def expected_pretty_string
-    "Products in Shopping Cart:\n"\
-      "1: Chain Ring | Quantity: 3 | Unit price: $100.99 | Price: $302.97\n"\
+    "1: Chain Ring | Quantity: 3 | Unit price: $100.99 | Price: $302.97\n"\
       "2: 11-23 cassette | Quantity: 2 | Unit price: $80.45 | Price: $160.90\n"\
       'Total: $463.87'
   end

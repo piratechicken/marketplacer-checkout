@@ -1,0 +1,14 @@
+[
+  {
+    "cart_subtotal": 20,
+    "percentage": 10
+  },
+  {
+    "cart_subtotal": 50,
+    "percentage": 15
+  },
+  {
+    "cart_subtotal": 100,
+    "percentage": 20
+  }
+]
